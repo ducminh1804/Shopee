@@ -50,7 +50,7 @@ export default function Register() {
             <div className='col-start-3 col-span-2'>
               <form onSubmit={handleSubmit(onSubmit)} className='rounded bg-white px-7'>
                 <div className='flex justify-between mb-10 pt-2'>
-                  <div className='title'>LOGIN</div>
+                  <div className='title'>REGISTER</div>
                   <div className='qr'>qr code</div>
                 </div>
                 <div className='inputform'>
