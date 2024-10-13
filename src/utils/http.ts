@@ -7,3 +7,14 @@ export const http = axios.create({
   }
 })
 
+http.interceptors.response.use(
+  function (response) {
+    const {url} = response.config
+    console.log('url', url)
+    return response;
+  },
+  function (error) {
+    return Promise.reject(error)
+  }
+)
+

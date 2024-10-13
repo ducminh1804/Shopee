@@ -5,9 +5,12 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from './layouts/MainLayout'
+import { useSelector } from 'react-redux'
+import { RootState } from './store'
 
 export default function useRouteElement() {
-  const [isLogin, setIsLogin] = useState<boolean>(false)
+  const isLogin = useSelector<RootState>((state)=>state.authReducer.isAuth)
+  console.log('isLogin', isLogin)
   const ProtectedIsNotLogin = () => {
     return isLogin ? <Outlet /> : <Navigate to='/login' />
   }
