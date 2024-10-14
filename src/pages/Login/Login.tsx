@@ -13,7 +13,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 import { isLogin } from '../authentication.slice'
 import { useNavigate } from 'react-router-dom'
-import { getDataFromLS, getUserProfile } from '../../utils/auth'
+import { getUserProfile } from '../../utils/auth'
+import classnames from 'classnames'
 
 export default function Login() {
   const {
@@ -21,8 +22,10 @@ export default function Login() {
     handleSubmit,
     formState: { errors }
   } = useForm<IFormInput>()
+
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     loginUserMutation.mutate(data, {
       onSuccess: async (data) => {
@@ -36,7 +39,6 @@ export default function Login() {
           const result = error.response?.data.data ?? { email: '', password: '' }
           Object.keys(result).forEach((key) => {
             const value = result[key as keyof IFormInput] // Ép kiểu để đảm bảo an toàn kiểu
-            // console.log(`Key: ${key}, Value: ${value}`)
             toast.error(`${value}`)
           })
         }
@@ -47,7 +49,7 @@ export default function Login() {
   const loginUserMutation = useMutation({
     mutationFn: (data: IFormInput) => ApiLoginUser(data)
   })
-
+  
   return (
     <div>
       <RegisterHeader />
@@ -82,7 +84,14 @@ export default function Login() {
                     />
                   </div>
                 </div>
-                <button className='rounded bg-orange p-1 w-full mt-2 text-gray-50 '>LOGIN</button>
+                <button
+                  className={classnames(
+                    `${loginUserMutation.isPending ? 'bg-red-400' : 'bg-orange'} rounded  p-1 w-full mt-2 text-gray-50`
+                  )}
+                  disabled={loginUserMutation.isPending}
+                >
+                  {loginUserMutation.isPending ? 'Đang xử lí' : 'Đăng nhập'}
+                </button>
                 <div className='flex justify-between'>
                   <div className='text-blue-500 text-xs'>
                     <a href=''>Forgot password</a>

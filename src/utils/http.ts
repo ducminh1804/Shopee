@@ -11,7 +11,6 @@ export const http = axios.create({
 
 http.interceptors.request.use(
   function (config) {
-    console.log('config', config)
     const token = localStorage.getItem('access_token')
     if (token) {
       config.headers.Authorization = `${token}`;
@@ -40,4 +39,3 @@ http.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
