@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AuthResponse } from "../types/auth.type";
-import { useSetDataToLS } from "./auth";
+import { clearLS, useSetDataToLS } from "./auth";
 
 export const http = axios.create({
   baseURL: "https://api-ecom.duthanhduoc.com/",
@@ -9,17 +9,31 @@ export const http = axios.create({
   }
 })
 
+http.interceptors.request.use(
+  function (config) {
+    console.log('config', config)
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      config.headers.Authorization = `${token}`;
+    }
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error)
+  }
+)
+
 http.interceptors.response.use(
   function (response) {
     const { url } = response.config
     if (url === '/login') {
-
+      const { access_token, refresh_token, user } = (response.data as AuthResponse).data;
+      useSetDataToLS("access_token", access_token)
+      useSetDataToLS("refresh_token", refresh_token)
+      useSetDataToLS("profile", user)
+    } else if (url === '/logout') {
+      clearLS()
     }
-    const { access_token, expires, refresh_token, expires_refresh_token, user } = (response.data as AuthResponse).data;
-    useSetDataToLS("access_token", access_token)
-    useSetDataToLS("refresh_token", refresh_token)
-    useSetDataToLS("profile", user)
-
     return response;
   },
   function (error) {

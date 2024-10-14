@@ -4,5 +4,5 @@ export interface SuccessReponse<Data> {
 }
 export interface ErrorResponse<Data> {
   "message": string,
-  "data": Data
+  "data"?: Data
 }

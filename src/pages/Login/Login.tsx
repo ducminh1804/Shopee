@@ -8,8 +8,12 @@ import { useMutation } from '@tanstack/react-query'
 import { ApiLoginUser } from '../../api/auth.api'
 import { toast } from 'react-toastify'
 import { isAxiosStatusCodeError } from '../../utils/utils'
-import { ErrorResponse } from '../../utils/utils.type'
-import { AuthResponse } from '../../types/auth.type'
+import { ErrorResponse } from '../../types/utils.type'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../store'
+import { isLogin } from '../authentication.slice'
+import { useNavigate } from 'react-router-dom'
+import { getDataFromLS, getUserProfile } from '../../utils/auth'
 
 export default function Login() {
   const {
@@ -17,14 +21,15 @@ export default function Login() {
     handleSubmit,
     formState: { errors }
   } = useForm<IFormInput>()
-
+  const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     loginUserMutation.mutate(data, {
-      onSuccess: (data) => {
-        const result: AuthResponse = data.data
-        // console.log('data', result.data)
-        // console.log('user', result.data.user)
+      onSuccess: async (data) => {
         toast('Login thanh cong')
+        const userProfile = await getUserProfile()
+        navigate('/')
+        dispatch(isLogin(userProfile))
       },
       onError: (error) => {
         if (isAxiosStatusCodeError<ErrorResponse<IFormInput>>(error)) {

@@ -7,3 +7,4 @@ import { http } from "../utils/http";
 // }
 export const registerUser = (body: IFormInput) => http.post('/register', body)
 export const ApiLoginUser = (body: IFormInput) => http.post('/login', body)
+export const ApiLogOut = () => http.post('/logout')

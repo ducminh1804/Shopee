@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerUser } from '../../api/auth.api'
 import { toast } from 'react-toastify'
 import { isAxiosStatusCodeError } from '../../utils/utils'
-import { ErrorResponse } from '../../utils/utils.type'
+import { ErrorResponse } from '../../types/utils.type'
 
 export default function Register() {
   const {

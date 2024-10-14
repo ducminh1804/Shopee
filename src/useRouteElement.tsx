@@ -10,7 +10,7 @@ import { RootState } from './store'
 
 export default function useRouteElement() {
   const isLogin = useSelector<RootState>((state)=>state.authReducer.isAuth)
-  console.log('isLogin', isLogin)
+
   const ProtectedIsNotLogin = () => {
     return isLogin ? <Outlet /> : <Navigate to='/login' />
   }
@@ -21,15 +21,13 @@ export default function useRouteElement() {
   let element = useRoutes([
     {
       path: '/',
-      element: <ProtectedIsNotLogin />,
+      element: <MainLayout />,
       children: [
         {
           path: '',
           index:true,
           element: (
-            <MainLayout>
               <ProductList />
-            </MainLayout>
           )
         }
       ]

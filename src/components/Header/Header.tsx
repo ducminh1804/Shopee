@@ -1,6 +1,31 @@
+import { useDispatch, useSelector } from 'react-redux'
 import Floating from '../Floating'
+import { RootState } from '../../store'
+import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
+import { ApiLogOut } from '../../api/auth.api'
+import { ErrorResponse } from '../../types/utils.type'
+import { toast } from 'react-toastify'
+import { isLogOut } from '../../pages/authentication.slice'
 
 export default function Header() {
+  const isLogin = useSelector((state: RootState) => state.authReducer.isAuth)
+  const userProfile = useSelector((state: RootState) => state.authReducer.profile)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const logOutMutation = useMutation({
+    mutationFn: () => ApiLogOut(),
+    onSuccess: (result) => {
+      const msg = (result.data as ErrorResponse<any>).message
+      toast(msg)
+      dispatch(isLogOut())
+    }
+  })
+
+  const handleClick = () => {
+    logOutMutation.mutate()
+  }
+
   return (
     <header className='w-full'>
       <div className='mt-0 pr-6 bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
@@ -46,30 +71,39 @@ export default function Header() {
             }
           />
 
-          <Floating
-            style='flex justify-end items-center text-white hover:text-gray-300 cursor-pointer'
-            Children={
-              <>
-                <ul className='mt-1 px-3 pt-1'>
-                  <li className='pb-2 m-0 hover:text-orange cursor-pointer'>Tài Khoản Của Tôi</li>
-                  <li className='pb-2 hover:text-orange cursor-pointer'>Đơn Mua</li>
-                  <li className='pb-2 hover:text-orange cursor-pointer'>Đăng Xuất</li>
-                </ul>
-              </>
-            }
-            referenceElement={
-              <>
-                <div className='mr-2'>
-                  <img
-                    className='w-6 h-6 object-cover rounded-full'
-                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCZZCrUoYtOHKuik5CaguDn-Sr-9p8-Qvifw&s'
-                    alt=''
-                  />
-                </div>
-                <span>Username</span>
-              </>
-            }
-          />
+          {isLogin && userProfile ? (
+            <Floating
+              style='flex justify-end items-center text-white hover:text-gray-300 cursor-pointer'
+              Children={
+                <>
+                  <ul className='mt-1 px-3 pt-1'>
+                    <li className='pb-2 m-0 hover:text-orange cursor-pointer'>Tài Khoản Của Tôi</li>
+                    <li className='pb-2 hover:text-orange cursor-pointer'>Đơn Mua</li>
+                    <button onClick={handleClick} className='pb-2 hover:text-orange cursor-pointer'>
+                      Đăng Xuất
+                    </button>
+                  </ul>
+                </>
+              }
+              referenceElement={
+                <>
+                  <div className='mr-2'>
+                    <img className='w-6 h-6 object-cover rounded-full' src={userProfile.avatar} alt='' />
+                  </div>
+                  <span>{userProfile._id}</span>
+                </>
+              }
+            />
+          ) : (
+            <>
+              <Link className='text-white hover:text-blue-300' to='/register'>
+                Đăng ký
+              </Link>
+              <Link className='text-white hover:text-blue-300' to='/login'>
+                Đăng nhập
+              </Link>
+            </>
+          )}
         </div>
       </div>
       <div className='px-20 py-5 bg-[linear-gradient(#ee4d2d,#ff7337)]'>
