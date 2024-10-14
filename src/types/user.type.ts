@@ -48,5 +48,5 @@ export interface User {
   address?: string
   phone?: string
   createdAt: string,
-  updateAt: string
+  updateAt?: string
 }

@@ -22,8 +22,8 @@ export default function Login() {
     loginUserMutation.mutate(data, {
       onSuccess: (data) => {
         const result: AuthResponse = data.data
-        console.log('data', result.data)
-        console.log('user', result.data.user)
+        // console.log('data', result.data)
+        // console.log('user', result.data.user)
         toast('Login thanh cong')
       },
       onError: (error) => {
@@ -31,7 +31,7 @@ export default function Login() {
           const result = error.response?.data.data ?? { email: '', password: '' }
           Object.keys(result).forEach((key) => {
             const value = result[key as keyof IFormInput] // Ép kiểu để đảm bảo an toàn kiểu
-            console.log(`Key: ${key}, Value: ${value}`)
+            // console.log(`Key: ${key}, Value: ${value}`)
             toast.error(`${value}`)
           })
         }
