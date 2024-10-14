@@ -17,6 +17,7 @@ export default function Register() {
     formState: { errors }
   } = useForm<IFormInput>()
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    //kiem tra obj tra ve tu response.data : data:{data,message}
     if (Object.keys(errors).length === 0) {
       registerMutation.mutate(data, {
         onSuccess: (data) => {
