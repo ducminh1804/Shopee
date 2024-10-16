@@ -1,7 +1,6 @@
 import React from 'react'
 import { RegisterOptions, UseFormRegister } from 'react-hook-form'
 
-
 interface InputProps {
   name: string
   placeholder: string
@@ -10,6 +9,7 @@ interface InputProps {
   register: UseFormRegister<any>
   rules?: RegisterOptions<any, string>
 }
+
 export default function Input({ name, placeholder, type, errorMessage, register, rules }: InputProps) {
   return (
     <div>
