@@ -1,4 +1,6 @@
+import Starts from '../../../../components/Starts'
 import { Product, Products } from '../../../../types/product.type'
+import { discount, formatNumber } from '../../../../utils/utils'
 
 interface Props {
   product: Product
@@ -9,28 +11,15 @@ export default function ProductDetail(props: Props) {
     <div className='h-full mt-1'>
       <div className='h-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
         <a href='#'>
-          <img className='rounded-t-lg' src={product.image} />
+          <img className='rounded-t-lg h-48 object' src={product.image} />
         </a>
-        <div className='p-1 flex flex-col justify-start'>
-          <p className='mb-3  font-normal text-gray-700'>{product.name.slice(0,40)}... </p>
+        <div className=' p-1 flex flex-col justify-start '>
+          <p className='mb-3  font-normal text-gray-700'>{product.name.slice(0, 45)}... </p>
           <div className='text-orange'>
-            <span>₫</span>
-            <span>{product.price}</span>
-            <span className='text-xs ml-2 bg-price'>-{(product.price_before_discount - product.price) / 100}%</span>
+            <span>{formatNumber(product.price)}</span>
+            <span className='text-xs ml-2 bg-price'>{discount(product.price, product.price_before_discount)}%</span>
           </div>
           <div className='flex items-center gap-1'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 20 20'
-              fill='currentColor'
-              className='size-4 text-orange'
-            >
-              <path
-                fillRule='evenodd'
-                d='M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z'
-                clipRule='evenodd'
-              />
-            </svg>
             <span className='text-xs text-center'>{product.rating}</span>
           </div>
         </div>
