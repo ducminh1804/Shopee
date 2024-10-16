@@ -1,21 +1,22 @@
-import React from 'react'
+import { Product, Products } from '../../../../types/product.type'
 
-export default function Product() {
+interface Props {
+  product: Product
+}
+export default function ProductDetail(props: Props) {
+  const { product } = props
   return (
-    <div className='container mt-1'>
-      <div className='max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
+    <div className='h-full mt-1'>
+      <div className='h-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
         <a href='#'>
-          <img
-            className='rounded-t-lg'
-            src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxgs0G2bD9vI6y9uYzqkYfayYokB9EGT0u_w&s'
-          />
+          <img className='rounded-t-lg' src={product.image} />
         </a>
         <div className='p-1 flex flex-col justify-start'>
-          <p className='mb-3  font-normal text-gray-700'>description </p>
+          <p className='mb-3  font-normal text-gray-700'>{product.name.slice(0,40)}... </p>
           <div className='text-orange'>
             <span>₫</span>
-            <span>69.000</span>
-            <span className='text-xs ml-2 bg-price'>-44%</span>
+            <span>{product.price}</span>
+            <span className='text-xs ml-2 bg-price'>-{(product.price_before_discount - product.price) / 100}%</span>
           </div>
           <div className='flex items-center gap-1'>
             <svg
@@ -30,7 +31,7 @@ export default function Product() {
                 clipRule='evenodd'
               />
             </svg>
-            <span className='text-xs text-center'>4.8</span>
+            <span className='text-xs text-center'>{product.rating}</span>
           </div>
         </div>
       </div>
