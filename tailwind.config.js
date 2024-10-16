@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         orange: '#ee4d2d',
-        orange_2:''
+        price:'rgb(254, 238, 234)'
       }
     }
   },

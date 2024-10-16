@@ -15,7 +15,7 @@ export default function ProductList() {
             {Array(30)
               .fill(0)
               .map((_, index) => (
-                <div className='col-span-2'>
+                <div key={index} className='col-span-2'>
                   <Product key={index} />
                 </div>
               ))}

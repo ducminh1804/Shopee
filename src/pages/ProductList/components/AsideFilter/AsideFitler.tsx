@@ -2,6 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { priceSchema } from '../../../../utils/RuleInputNumber'
 import { IFormPrice } from '../../../../types/IFormPrice'
+import Starts from '../../../../components/Starts'
 
 export default function AsideFitler() {
   const {
@@ -64,7 +65,7 @@ export default function AsideFitler() {
         </svg>
         BO LOC TIM KIEM
       </div>
-      <div className='p-2'>
+      <div className='p-2 pb-5 border-b-2 border-gray-300'>
         <span>Khoang gia</span>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex gap-1 justify-between'>
@@ -80,6 +81,13 @@ export default function AsideFitler() {
           </div>
           <button className='w-full mt-2 p-2 btn bg-orange text-white rounded hover:bg-red-500'>AP DUNG</button>
         </form>
+      </div>
+      <div className='review'>
+        {Array(5)
+          .fill(0)
+          .map((_, index) => (
+            <Starts key={index} star={4-index} title={`${index}__star`} />
+          ))}
       </div>
     </div>
   )
