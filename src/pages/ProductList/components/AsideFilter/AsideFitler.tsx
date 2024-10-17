@@ -86,7 +86,7 @@ export default function AsideFitler() {
         {Array(5)
           .fill(0)
           .map((_, index) => (
-            <Starts isCur={false} key={index} star={4-index} title={`${index}__star`} />
+            <Starts isCur={false} key={index} star={4 - index} title={`${index}__star`} />
           ))}
       </div>
     </div>

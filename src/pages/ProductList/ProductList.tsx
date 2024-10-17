@@ -4,14 +4,14 @@ import Product from './components/Product'
 import SortProductList from './components/SortProductList'
 import { getProducts } from '../../api/product.api'
 import { getQueryParam } from '../../hooks/getQueryParams'
+import Pagination from '../../components/Pagination'
 
 export default function ProductList() {
   const params = getQueryParam()
   const getProductsQuery = useQuery({
-    queryKey: ['products',params],
+    queryKey: ['products', params],
     queryFn: () => getProducts(params)
   })
-  console.log(getProductsQuery.data)
   const products = getProductsQuery.data?.data.data.products || []
   return (
     <div>
@@ -21,12 +21,15 @@ export default function ProductList() {
         </div>
         <div className='col-span-9'>
           <SortProductList />
-          <div className='grid grid-cols-9 gap-6'>
+          <div className='mb-10 grid grid-cols-9 gap-6'>
             {products.map((product) => (
               <div key={product._id} className='col-span-2'>
                 <Product product={product} />
               </div>
             ))}
+          </div>
+          <div className=''>
+            <Pagination />
           </div>
         </div>
       </div>

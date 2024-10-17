@@ -21,6 +21,7 @@ export default function ProductDetail(props: Props) {
           </div>
           <div className='flex items-center gap-1'>
             <span className='text-xs text-center'>{product.rating}</span>
+            <Starts key={product._id} star={5} cur={product.rating} isCur={true} title={'start'} size={5} />
           </div>
         </div>
       </div>
