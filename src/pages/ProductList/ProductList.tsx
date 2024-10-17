@@ -5,14 +5,30 @@ import SortProductList from './components/SortProductList'
 import { getProducts } from '../../api/product.api'
 import { getQueryParam } from '../../hooks/getQueryParams'
 import Pagination from '../../components/Pagination'
-
+import { productParam } from '../../types/productQueryParam.type'
+import { AxiosRequestConfig } from 'axios'
 export default function ProductList() {
-  const params = getQueryParam()
+  const params: productParam = getQueryParam()
+  const queryConfig: productParam = {
+    category: params.category,
+    exclude: params.exclude,
+    limit: params.limit,
+    name: params.name,
+    order: params.order,
+    price_max: params.price_max,
+    price_min: params.price_min,
+    rating_filter: params.rating_filter,
+    sort_by: params.sort_by,
+    page: params.page
+  }
   const getProductsQuery = useQuery({
-    queryKey: ['products', params],
-    queryFn: () => getProducts(params)
+    queryKey: ['products', queryConfig],
+    queryFn: () => getProducts(queryConfig as AxiosRequestConfig<productParam>)
   })
+
+
   const products = getProductsQuery.data?.data.data.products || []
+  const pageSize = getProductsQuery.data?.data.data.pagination.page_size || 20
   return (
     <div>
       <div className='grid grid-cols-12 gap-6 p-4'>
@@ -29,7 +45,7 @@ export default function ProductList() {
             ))}
           </div>
           <div className=''>
-            <Pagination />
+            <Pagination pageSize={pageSize} />
           </div>
         </div>
       </div>

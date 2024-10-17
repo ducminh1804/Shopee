@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { Products } from "../types/product.type";
-import { productParam } from "../types/productParam";
+import { productParam } from "../types/productQueryParam.type";
 import { SuccessReponse } from "../types/utils.type";
 import { http } from "../utils/http";
 

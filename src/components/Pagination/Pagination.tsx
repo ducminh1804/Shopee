@@ -2,25 +2,25 @@ import classNames from 'classnames'
 import React from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 
-export default function Pagination() {
+interface Props {
+  pageSize: number
+}
+export default function Pagination({ pageSize }: Props) {
   const [searchParams] = useSearchParams()
   const page = searchParams.get('page')
-
-  const limitPage = 20
+  const limitPage = pageSize
   const curPage = Number(page)
-
-  console.log('curPage', curPage)
   const pages: number[] = []
   for (let i = curPage - 2; i <= curPage + 2; i++) {
     if (i > 0) pages.push(i)
   }
-  // console.log('pages', pages)
-  const pagi = Array(20)
+
+  const pagi = Array(limitPage)
     .fill(0)
     .map((_, index) => {
       const pageNumber = index + 1
-      console.log(pageNumber)
-      if (pageNumber === 1 || pageNumber === 2 || pageNumber === 19 || pageNumber === 20) {
+
+      if (pageNumber === 1 || pageNumber === 2 || pageNumber === limitPage - 1 || pageNumber === limitPage) {
         return (
           <Link
             to={`/?page=${index + 1}`}
@@ -84,6 +84,7 @@ export default function Pagination() {
 
   const previos = (
     <Link
+      key={'prev'}
       to={`/?page=${curPage - 1}`}
       className={classNames(
         'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
@@ -97,13 +98,14 @@ export default function Pagination() {
   )
   const next = (
     <Link
-    to={`/?page=${curPage + 1}`}
-    className={classNames(
-      'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-      {
-        'pointer-events-none opacity-50 cursor-not-allowed':curPage === limitPage
-      }
-    )}
+      key={'next'}
+      to={`/?page=${curPage + 1}`}
+      className={classNames(
+        'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+        {
+          'pointer-events-none opacity-50 cursor-not-allowed': curPage === limitPage
+        }
+      )}
     >
       Previos
     </Link>
