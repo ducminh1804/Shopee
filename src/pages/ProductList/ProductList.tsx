@@ -22,7 +22,7 @@ export default function ProductList() {
       price_min: params.price_min,
       rating_filter: params.rating_filter,
       sort_by: params.sort_by,
-      page: params.page
+      page: params.page || 1
     },
     isUndefined
   )
@@ -30,7 +30,6 @@ export default function ProductList() {
     queryKey: ['products', queryConfig],
     queryFn: () => getProducts(queryConfig as AxiosRequestConfig<productParam>)
   })
-
 
   const products = getProductsQuery.data?.data.data.products || []
   const pageSize = getProductsQuery.data?.data.data.pagination.page_size || 20
@@ -50,7 +49,7 @@ export default function ProductList() {
             ))}
           </div>
           <div className=''>
-            <Pagination pageSize={pageSize} />
+            <Pagination queryConfig={queryConfig} pageSize={pageSize} />
           </div>
         </div>
       </div>

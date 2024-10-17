@@ -14,11 +14,9 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
   const isActive = (sortOption: Exclude<sortOption['sort_by'], undefined>) => {
     return sort_by === sortOption
   }
-  // {limit: '3', page: '1'}
+
   const handleClick = (option: Exclude<sortOption['sort_by'], undefined>) => {
     const params: any = { ...queryConfig, sort_by: option }
-    console.log(params)
-    console.log(JSON.stringify(params))
     navigate({
       pathname: '/',
       search: `?${createSearchParams(params)}`
