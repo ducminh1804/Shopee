@@ -30,7 +30,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
         <div className='option flex gap-7'>
           <button
             className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-button text-white': isActive('view')
+              'bg-blue-600 text-black': isActive('view')
             })}
             onClick={() => handleClick('view')}
           >
@@ -38,7 +38,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           </button>
           <button
             className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-button text-white': isActive('createdAt')
+              'bg-blue-600 text-black': isActive('createdAt')
             })}
             onClick={() => handleClick('createdAt')}
           >
@@ -46,7 +46,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           </button>
           <button
             className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-button text-white': isActive('sold')
+              'bg-blue-600 text-black': isActive('sold')
             })}
             onClick={() => handleClick('sold')}
           >

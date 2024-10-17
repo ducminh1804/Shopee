@@ -8,6 +8,7 @@ import Pagination from '../../components/Pagination'
 import { productParam } from '../../types/productQueryParam.type'
 import { AxiosRequestConfig } from 'axios'
 import { isUndefined, omitBy } from 'lodash'
+import Skeleton from '../../components/Skeleton'
 
 export default function ProductList() {
   const params: productParam = getQueryParam()
@@ -30,7 +31,7 @@ export default function ProductList() {
     queryKey: ['products', queryConfig],
     queryFn: () => getProducts(queryConfig as AxiosRequestConfig<productParam>)
   })
-
+  console.log(getProductsQuery.isLoading)
   const products = getProductsQuery.data?.data.data.products || []
   const pageSize = getProductsQuery.data?.data.data.pagination.page_size || 20
   return (
@@ -42,11 +43,30 @@ export default function ProductList() {
         <div className='col-span-9'>
           <SortProductList queryConfig={queryConfig} pageSize={pageSize} />
           <div className='mb-10 grid grid-cols-9 gap-6'>
-            {products.map((product) => (
+            {getProductsQuery.isLoading
+              ? Array(20)
+                  .fill(0)
+                  .map(
+                    (
+                      _,
+                      index // Assuming you want 6 skeletons
+                    ) => (
+                      <div key={index} className='col-span-2'>
+                        <Skeleton />
+                      </div>
+                    )
+                  )
+              : products.map((product) => (
+                  <div key={product._id} className='col-span-2'>
+                    <Product product={product} />
+                  </div>
+                ))}
+
+            {/* {products.map((product) => (
               <div key={product._id} className='col-span-2'>
                 <Product product={product} />
               </div>
-            ))}
+            ))} */}
           </div>
           <div className=''>
             <Pagination queryConfig={queryConfig} pageSize={pageSize} />
