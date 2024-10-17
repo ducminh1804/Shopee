@@ -1,13 +1,59 @@
+import classNames from 'classnames'
+import { productParam, sortOption } from '../../../../types/productQueryParam.type'
+import { cloneElement, MouseEventHandler } from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 
-export default function SortProductList() {
+interface Props {
+  queryConfig: productParam
+  pageSize: number
+}
+
+export default function SortProductList({ queryConfig, pageSize }: Props) {
+  const { sort_by } = queryConfig
+  const navigate = useNavigate()
+  const isActive = (sortOption: Exclude<sortOption['sort_by'], undefined>) => {
+    return sort_by === sortOption
+  }
+  // {limit: '3', page: '1'}
+  const handleClick = (option: Exclude<sortOption['sort_by'], undefined>) => {
+    const params: any = { ...queryConfig, sort_by: option }
+    console.log(params)
+    console.log(JSON.stringify(params))
+    navigate({
+      pathname: '/',
+      search: `?${createSearchParams(params)}`
+    })
+  }
+
   return (
     <div className='flex justify-between items-center p-5 bg-white'>
       <div className='flex justify-between gap-4 items-center'>
         <div className='title'>Sắp xếp theo</div>
         <div className='option flex gap-7'>
-          <button className='p-2 rounded text-black bg-white active:bg-orange active:text-white'>lien quan</button>
-          <button className='p-2 bg-orange rounded'>moi nhat</button>
-          <button className='p-2 bg-orange rounded'>ban chay</button>
+          <button
+            className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
+              'bg-button text-white': isActive('view')
+            })}
+            onClick={() => handleClick('view')}
+          >
+            Phổ Biến
+          </button>
+          <button
+            className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
+              'bg-button text-white': isActive('createdAt')
+            })}
+            onClick={() => handleClick('createdAt')}
+          >
+            Mới Nhất
+          </button>
+          <button
+            className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
+              'bg-button text-white': isActive('sold')
+            })}
+            onClick={() => handleClick('sold')}
+          >
+            Bán Chạy
+          </button>
           <select name='cars' id='cars'>
             <option value='saab'>Giá</option>
             <option value='opel'>Giá: Thấp đến cao</option>

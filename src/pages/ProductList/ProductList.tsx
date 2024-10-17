@@ -7,20 +7,25 @@ import { getQueryParam } from '../../hooks/getQueryParams'
 import Pagination from '../../components/Pagination'
 import { productParam } from '../../types/productQueryParam.type'
 import { AxiosRequestConfig } from 'axios'
+import { isUndefined, omitBy } from 'lodash'
+
 export default function ProductList() {
   const params: productParam = getQueryParam()
-  const queryConfig: productParam = {
-    category: params.category,
-    exclude: params.exclude,
-    limit: params.limit,
-    name: params.name,
-    order: params.order,
-    price_max: params.price_max,
-    price_min: params.price_min,
-    rating_filter: params.rating_filter,
-    sort_by: params.sort_by,
-    page: params.page
-  }
+  const queryConfig: productParam = omitBy(
+    {
+      category: params.category,
+      exclude: params.exclude,
+      limit: params.limit,
+      name: params.name,
+      order: params.order,
+      price_max: params.price_max,
+      price_min: params.price_min,
+      rating_filter: params.rating_filter,
+      sort_by: params.sort_by,
+      page: params.page
+    },
+    isUndefined
+  )
   const getProductsQuery = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => getProducts(queryConfig as AxiosRequestConfig<productParam>)
@@ -36,7 +41,7 @@ export default function ProductList() {
           <AsideFitler />
         </div>
         <div className='col-span-9'>
-          <SortProductList />
+          <SortProductList queryConfig={queryConfig} pageSize={pageSize} />
           <div className='mb-10 grid grid-cols-9 gap-6'>
             {products.map((product) => (
               <div key={product._id} className='col-span-2'>
