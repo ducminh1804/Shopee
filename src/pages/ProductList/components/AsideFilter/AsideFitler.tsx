@@ -115,7 +115,19 @@ export default function AsideFitler({ categories, queryConfig }: Props) {
         {Array(5)
           .fill(0)
           .map((_, index) => (
-            <Starts isCur={false} key={index} star={4 - index} title={`${index}__star`} />
+            <div className='flex justify-between'>
+              <Starts isCur={false} key={index} star={4 - index} title={`${index}__star`} />
+              <Link
+                to={{
+                  pathname: '/',
+                  // search: `?${createSearchParams({ ...queryConfig, category: category._id } as any)}`
+                  search: `${createSearchParams({ ...queryConfig, rating_filter: 5 - index } as any)}`
+                }}
+                className='pr-2 hover:text-orange cursor-pointer font-bold'
+              >
+                {5 - index} Trở lên
+              </Link>
+            </div>
           ))}
       </div>
     </div>
