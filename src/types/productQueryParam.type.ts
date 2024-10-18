@@ -3,13 +3,13 @@ export type productParam = {
   limit?: number,
   order?: 'desc' | 'asc',
   sort_by?: 'createdAt' | 'view' | 'sold' | 'price',
-  category?: number,
+  category?: string,
   exclude?: number,
   rating_filter?: number,
   price_min?: number,
   price_max?: number,
   name?: string,
-  page?:number
+  page?: number
 }
 
 export type sortOption = {

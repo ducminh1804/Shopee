@@ -9,6 +9,7 @@ import { productParam } from '../../types/productQueryParam.type'
 import { AxiosRequestConfig } from 'axios'
 import { isUndefined, omitBy } from 'lodash'
 import Skeleton from '../../components/Skeleton'
+import { getCategories } from '../../api/categories'
 
 export default function ProductList() {
   const params: productParam = getQueryParam()
@@ -18,7 +19,7 @@ export default function ProductList() {
       exclude: params.exclude,
       limit: params.limit,
       name: params.name,
-      order: params.order ,
+      order: params.order,
       price_max: params.price_max,
       price_min: params.price_min,
       rating_filter: params.rating_filter,
@@ -31,13 +32,20 @@ export default function ProductList() {
     queryKey: ['products', queryConfig],
     queryFn: () => getProducts(queryConfig as AxiosRequestConfig<productParam>)
   })
+
+  const categoriesQuery = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => getCategories()
+  })
+
+  const categories = categoriesQuery.data?.data.data || []
   const products = getProductsQuery.data?.data.data.products || []
   const pageSize = getProductsQuery.data?.data.data.pagination.page_size || 20
   return (
     <div>
       <div className='grid grid-cols-12 gap-6 p-4'>
         <div className='col-span-3'>
-          <AsideFitler />
+          <AsideFitler categories={categories} queryConfig={queryConfig} />
         </div>
         <div className='col-span-9'>
           <SortProductList queryConfig={queryConfig} pageSize={pageSize} />
@@ -60,12 +68,6 @@ export default function ProductList() {
                     <Product product={product} />
                   </div>
                 ))}
-
-            {/* {products.map((product) => (
-              <div key={product._id} className='col-span-2'>
-                <Product product={product} />
-              </div>
-            ))} */}
           </div>
           <div className=''>
             <Pagination queryConfig={queryConfig} pageSize={pageSize} />

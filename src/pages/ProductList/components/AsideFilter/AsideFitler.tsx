@@ -3,8 +3,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { priceSchema } from '../../../../utils/RuleInputNumber'
 import { IFormPrice } from '../../../../types/IFormPrice'
 import Starts from '../../../../components/Starts'
+import { createSearchParams, Link } from 'react-router-dom'
+import { Category } from '../../../../types/category'
+import { productParam } from '../../../../types/productQueryParam.type'
+import classNames from 'classnames'
 
-export default function AsideFitler() {
+interface Props {
+  categories: Category[]
+  queryConfig: productParam
+}
+export default function AsideFitler({ categories, queryConfig }: Props) {
+  const { category } = queryConfig
   const {
     register,
     handleSubmit,
@@ -14,6 +23,9 @@ export default function AsideFitler() {
   const onSubmit: SubmitHandler<IFormPrice> = (data) => {
     console.log(data)
     console.log('errors', errors)
+  }
+  const isActive = (categoryFilter: string) => {
+    return categoryFilter === category
   }
 
   return (
@@ -44,8 +56,25 @@ export default function AsideFitler() {
             </svg>
             <span className='font-bold'>THOI TRANG NAM</span>
           </div>
-          <li>2</li>
-          <li>3</li>
+          <li>
+            {categories.map((category) => {
+              return (
+                <div key={category._id} className='pl-4 mb-1'>
+                  <Link
+                    className={classNames('hover:text-orange', {
+                      'font-bold text-orange': isActive(category._id)
+                    })}
+                    to={{
+                      pathname: '/',
+                      search: `?${createSearchParams({ ...queryConfig, category: category._id } as any)}`
+                    }}
+                  >
+                    {category.name}
+                  </Link>
+                </div>
+              )
+            })}
+          </li>
         </ul>
       </div>
       <div className='p-2 font-bold flex items-center gap-2 border-b-2 border-gray-300'>

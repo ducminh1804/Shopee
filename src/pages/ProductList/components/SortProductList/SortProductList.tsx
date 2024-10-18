@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { orderOption, productParam, sortOption } from '../../../../types/productQueryParam.type'
-import { cloneElement, MouseEventHandler } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
+import { Category } from '../../../../types/category'
 
 interface Props {
   queryConfig: productParam
@@ -9,10 +9,14 @@ interface Props {
 }
 
 export default function SortProductList({ queryConfig, pageSize }: Props) {
-  const { sort_by } = queryConfig
+  //lay ra cac queryParam de so sanh voi button de xem no dc active hay chua
+  const { sort_by, order } = queryConfig
   const navigate = useNavigate()
   const isActive = (sortOption: Exclude<sortOption['sort_by'], undefined>) => {
     return sort_by === sortOption
+  }
+  const isOrderPriceActive = (orderOption: Exclude<orderOption['order'], undefined>) => {
+    return order === orderOption
   }
 
   const handleClick = (option: Exclude<sortOption['sort_by'], undefined>) => {
@@ -62,13 +66,20 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
             Bán Chạy
           </button>
           <select
+            className='bg-orange text-white'
             name='price'
             id='cars'
             onChange={(event) => handleChange(event.target.value as Exclude<orderOption['order'], undefined>)}
           >
-            <option value=''>Giá</option>
-            <option value='asc'>Giá: Thấp đến cao</option>
-            <option value='desc'>Giá: Cao đến thấp</option>
+            <option className='bg-white text-black' value=''>
+              Giá
+            </option>
+            <option className='bg-white text-black' value='asc'>
+              Giá: Thấp đến cao
+            </option>
+            <option className='bg-white text-black' value='desc'>
+              Giá: Cao đến thấp
+            </option>
           </select>
         </div>
       </div>
