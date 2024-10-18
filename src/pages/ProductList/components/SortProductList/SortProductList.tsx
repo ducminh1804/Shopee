@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { productParam, sortOption } from '../../../../types/productQueryParam.type'
+import { orderOption, productParam, sortOption } from '../../../../types/productQueryParam.type'
 import { cloneElement, MouseEventHandler } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 
@@ -23,6 +23,15 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
     })
   }
 
+  //de tranh nguoi dung truyen order !== asc va desc=> dinh nghia kieu:Exclude<orderOption['order'],undefined>=> (parameter) option: "desc" | "asc"
+  const handleChange = (option: Exclude<orderOption['order'], undefined>) => {
+    console.log(option)
+    const params: any = { ...queryConfig, order: option }
+    navigate({
+      pathname: '/',
+      search: `?${createSearchParams(params)}`
+    })
+  }
   return (
     <div className='flex justify-between items-center p-5 bg-white'>
       <div className='flex justify-between gap-4 items-center'>
@@ -30,7 +39,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
         <div className='option flex gap-7'>
           <button
             className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-blue-600 text-black': isActive('view')
+              'bg-button text-white': isActive('view')
             })}
             onClick={() => handleClick('view')}
           >
@@ -38,7 +47,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           </button>
           <button
             className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-blue-600 text-black': isActive('createdAt')
+              'bg-button text-white': isActive('createdAt')
             })}
             onClick={() => handleClick('createdAt')}
           >
@@ -46,16 +55,20 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           </button>
           <button
             className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-blue-600 text-black': isActive('sold')
+              'bg-button text-white': isActive('sold')
             })}
             onClick={() => handleClick('sold')}
           >
             Bán Chạy
           </button>
-          <select name='cars' id='cars'>
-            <option value='saab'>Giá</option>
-            <option value='opel'>Giá: Thấp đến cao</option>
-            <option value='audi'>Giá: Cao đến thấp</option>
+          <select
+            name='price'
+            id='cars'
+            onChange={(event) => handleChange(event.target.value as Exclude<orderOption['order'], undefined>)}
+          >
+            <option value=''>Giá</option>
+            <option value='asc'>Giá: Thấp đến cao</option>
+            <option value='desc'>Giá: Cao đến thấp</option>
           </select>
         </div>
       </div>

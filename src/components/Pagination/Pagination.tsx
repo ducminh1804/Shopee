@@ -1,6 +1,5 @@
 import classNames from 'classnames'
-import React from 'react'
-import { createSearchParams, Link, useParams, useSearchParams } from 'react-router-dom'
+import { createSearchParams, Link, useSearchParams } from 'react-router-dom'
 import { productParam } from '../../types/productQueryParam.type'
 
 interface Props {
@@ -13,7 +12,6 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
   const limitPage = pageSize
   const curPage = Number(page)
   const pages: number[] = []
-  // const params: any = { ...queryConfig, sort_by: option }
 
   for (let i = curPage - 2; i <= curPage + 2; i++) {
     if (i > 0) pages.push(i)
@@ -37,7 +35,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
             className={classNames(
               'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
               {
-                'bg-blue-600 text-black': curPage === pageNumber
+                'bg-gray-600 text-white': curPage === pageNumber
               }
             )}
           >
@@ -58,7 +56,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
             className={classNames(
               'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
               {
-                'bg-blue-600 text-black': curPage === pageNumber
+                'bg-gray-600 text-white': curPage === pageNumber
               }
             )}
           >
@@ -72,7 +70,7 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
             className={classNames(
               'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
               {
-                'bg-blue-600 text-black': curPage === pageNumber
+                'bg-gray-600 text-white': curPage === pageNumber
               }
             )}
           >

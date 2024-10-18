@@ -17,5 +17,5 @@ export type sortOption = {
 }
 export type orderOption = {
   order?: 'desc' | 'asc',
-
 }
+
