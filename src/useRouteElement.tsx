@@ -7,9 +7,10 @@ import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from './layouts/MainLayout'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
+import ProductDetail from './pages/ProductDetail'
 
 export default function useRouteElement() {
-  const isLogin = useSelector<RootState>((state)=>state.authReducer.isAuth)
+  const isLogin = useSelector<RootState>((state) => state.authReducer.isAuth)
 
   const ProtectedIsNotLogin = () => {
     return isLogin ? <Outlet /> : <Navigate to='/login' />
@@ -25,10 +26,12 @@ export default function useRouteElement() {
       children: [
         {
           path: '',
-          index:true,
-          element: (
-              <ProductList />
-          )
+          index: true,
+          element: <ProductList />
+        },
+        {
+          path: ':nameId',
+          element: <ProductDetail />
         }
       ]
     },

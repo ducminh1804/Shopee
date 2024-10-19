@@ -3,16 +3,19 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { priceSchema } from '../../../../utils/RuleInputNumber'
 import { IFormPrice } from '../../../../types/IFormPrice'
 import Starts from '../../../../components/Starts'
-import { createSearchParams, Link } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import { Category } from '../../../../types/category'
 import { productParam } from '../../../../types/productQueryParam.type'
 import classNames from 'classnames'
+import { clearScreenDown } from 'readline'
 
 interface Props {
   categories: Category[]
   queryConfig: productParam
 }
 export default function AsideFitler({ categories, queryConfig }: Props) {
+  const { rating_filter } = queryConfig
+  const navigate = useNavigate()
   const { category } = queryConfig
   const {
     register,
@@ -21,11 +24,18 @@ export default function AsideFitler({ categories, queryConfig }: Props) {
   } = useForm({ resolver: yupResolver(priceSchema) })
 
   const onSubmit: SubmitHandler<IFormPrice> = (data) => {
-    console.log(data)
-    console.log('errors', errors)
+    const { price_min, price_max } = data
+    navigate({
+      pathname: '/',
+      search: `?${createSearchParams({ ...queryConfig, price_min: price_min, price_max: price_max } as any)}`
+    })
   }
   const isActive = (categoryFilter: string) => {
     return categoryFilter === category
+  }
+
+  const isActiveRatingFilter = (ratingFilter: number) => {
+    return ratingFilter === Number(rating_filter)
   }
 
   return (
@@ -115,15 +125,17 @@ export default function AsideFitler({ categories, queryConfig }: Props) {
         {Array(5)
           .fill(0)
           .map((_, index) => (
-            <div className='flex justify-between'>
-              <Starts isCur={false} key={index} star={4 - index} title={`${index}__star`} />
+            <div key={index} className='flex justify-between'>
+              <Starts isCur={false} star={4 - index} title={`${index}__star`} />
               <Link
                 to={{
                   pathname: '/',
                   // search: `?${createSearchParams({ ...queryConfig, category: category._id } as any)}`
                   search: `${createSearchParams({ ...queryConfig, rating_filter: 5 - index } as any)}`
                 }}
-                className='pr-2 hover:text-orange cursor-pointer font-bold'
+                className={classNames('pr-2 hover:text-orange cursor-pointer', {
+                  'text-orange font-bold': isActiveRatingFilter(5-index)
+                })}
               >
                 {5 - index} Trở lên
               </Link>

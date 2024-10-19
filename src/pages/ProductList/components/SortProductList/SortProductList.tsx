@@ -42,24 +42,24 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
         <div className='title'>Sắp xếp theo</div>
         <div className='option flex gap-7'>
           <button
-            className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-button text-white': isActive('view')
+            className={classNames(' p-2 rounded text-black bg-white   border-2', {
+              'bg-black text-white font-bold': isActive('view')
             })}
             onClick={() => handleClick('view')}
           >
             Phổ Biến
           </button>
           <button
-            className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-button text-white': isActive('createdAt')
+            className={classNames(' p-2 rounded text-black bg-white  border-2', {
+              'bg-black text-white font-bold': isActive('createdAt')
             })}
             onClick={() => handleClick('createdAt')}
           >
             Mới Nhất
           </button>
           <button
-            className={classNames(' p-2 rounded text-black bg-white active:bg-orange active:text-white border-2', {
-              'bg-button text-white': isActive('sold')
+            className={classNames(' p-2 rounded text-black bg-white  border-2', {
+              'bg-black text-white font-bold': isActive('sold')
             })}
             onClick={() => handleClick('sold')}
           >
@@ -71,7 +71,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
             id='cars'
             onChange={(event) => handleChange(event.target.value as Exclude<orderOption['order'], undefined>)}
           >
-            <option className='bg-white text-black' value=''>
+            <option className='w' value=''>
               Giá
             </option>
             <option className='bg-white text-black' value='asc'>
