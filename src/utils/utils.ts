@@ -24,3 +24,16 @@ export const formatNumber = (data: number) => {
 export const discount = (a: number, b: number) => {
   return formatNumber((a - b) / a * 100)
 }
+
+export const removeSpecialCharacter = (str: string) => {
+  return str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '')
+}
+
+export const generateNameId = (name: string, id: string) => {
+  return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i.${id}`
+}
+
+export const getIdFromNameId = (nameId: string) => {
+  const arr = nameId.split('-i.')
+  return arr[arr.length - 1]
+}

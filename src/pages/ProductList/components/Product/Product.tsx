@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Starts from '../../../../components/Starts'
 import { Product as ProductType, Products } from '../../../../types/product.type'
-import { discount, formatNumber } from '../../../../utils/utils'
+import { discount, formatNumber, generateNameId } from '../../../../utils/utils'
 
 interface Props {
   product: ProductType
@@ -9,10 +9,10 @@ interface Props {
 export default function Product(props: Props) {
   const { product } = props
   return (
-    <Link to={`/${product._id}`}>
+    <Link to={`/${generateNameId(product.name, product._id)}`}>
       <div className='h-full mt-1'>
         <div className='h-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-            <img className='rounded-t-lg h-48 object' src={product.image} />
+          <img className='rounded-t-lg h-48 object' src={product.image} />
           <div className=' p-1 flex flex-col justify-start '>
             <p className='mb-3  font-normal text-gray-700'>{product.name.slice(0, 45)}... </p>
             <div className='text-orange'>
