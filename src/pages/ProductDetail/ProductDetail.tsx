@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useQueryParams } from '../../hooks/useQueryParams'
 import { getProductById } from '../../api/product.api'
@@ -8,6 +8,13 @@ import { discount, formatNumber, getIdFromNameId } from '../../utils/utils'
 import { useEffect, useMemo, useState } from 'react'
 import { Product } from '../../types/product.type'
 import QuantityController from '../../components/QuantityController'
+import purchaseApi from '../../api/purchase.api'
+import { Purchases } from '../../types/purchase.type'
+import { SuccessReponse } from '../../types/utils.type'
+import { AxiosResponse } from 'axios'
+import { toast } from 'react-toastify'
+import { queryClient } from '../../main'
+import { purchaseStatus } from '../../constants/purchases'
 
 export default function ProductDetail() {
   const { nameId } = useParams()
@@ -19,6 +26,11 @@ export default function ProductDetail() {
     queryFn: () => getProductById(id as string)
   })
 
+  const addToCartMutations = useMutation({
+    mutationFn: (product: Product) => {
+      return purchaseApi.addToCart({ product_id: product._id, buy_count: quantity })
+    }
+  })
   const product = productQuery.data?.data.data as Product
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const currentImages = useMemo(() => product?.images.slice(...currentIndexImages) || [], [currentIndexImages, product])
@@ -40,6 +52,17 @@ export default function ProductDetail() {
 
   const handleQuantity = (quantity: number) => {
     setQuantity(quantity)
+  }
+
+  const addToCart = () => {
+    addToCartMutations.mutate(product, {
+      onSuccess: () => {
+        toast.success('Thêm vào giỏ hàng thành công')
+        queryClient.invalidateQueries({
+          queryKey: ['product', { status: purchaseStatus.inCart }]
+        })
+      }
+    })
   }
   return (
     <div className='py-6 px-6'>
@@ -141,7 +164,9 @@ export default function ProductDetail() {
                   />
                 </div>
                 <div className='action'>
-                  <button className='text-xs text-orange border-1 p-3 rounded bg-gray-400'>Thêm Vào Giỏ Hàng</button>
+                  <button onClick={addToCart} className='text-xs text-orange border-1 p-3 rounded bg-gray-400'>
+                    Thêm Vào Giỏ Hàng
+                  </button>
                   <button className='my-2 mx-2 text-xs text-white border-1 p-3 rounded bg-orange'>Mua Ngay</button>
                 </div>
               </div>

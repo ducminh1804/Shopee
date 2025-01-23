@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Floating from '../Floating'
 import { RootState } from '../../store'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { ApiLogOut } from '../../api/auth.api'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
@@ -10,11 +10,18 @@ import { isLogOut } from '../../pages/authentication.slice'
 import { useQueryConfig } from '../../hooks/useQueryConfig'
 import { useForm } from 'react-hook-form'
 import { omit } from 'lodash'
+import { purchaseStatus } from '../../constants/purchases'
+import purchaseApi from '../../api/purchase.api'
+import { useEffect } from 'react'
 
 type FormValues = {
   productName: string
 }
 export default function Header() {
+  const getPurchases = useQuery({
+    queryKey: ['product', { status: purchaseStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
+  })
   const { register, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       productName: ''
@@ -60,6 +67,8 @@ export default function Header() {
       ).toString()
     })
   }
+
+  const all_purchases = getPurchases.data?.data.data
   return (
     <header className='w-full'>
       <div className='mt-0 pr-6 bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
@@ -187,21 +196,23 @@ export default function Header() {
               <>
                 <ul className='space-x-4 mt-1 px-3 pt-1'>
                   <span className='text-gray-300'>Sản Phẩm Mới Thêm</span>
-                  <li style={{ width: '400px' }} className='pb-2 m-0 hover:text-orange cursor-pointer'>
-                    <div className='flex justify-between items-center'>
-                      <div className='flex'>
-                        <div className='items-center mx-4'>
-                          <img
-                            className='w-10 h-10 object-cover '
-                            src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCZZCrUoYtOHKuik5CaguDn-Sr-9p8-Qvifw&s'
-                            alt=''
-                          />
+                  {all_purchases ? (
+                    all_purchases.map((item, index) => (
+                      <li style={{ width: '400px' }} className='pb-2 m-0 hover:text-orange cursor-pointer'>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex'>
+                            <div className='items-center mx-4'>
+                              <img className='w-10 h-10 object-cover ' src={item.product.image} alt='' />
+                            </div>
+                            <span>{item.product.name}</span>
+                          </div>
+                          <div className='text-orange'>${item.price * item.buy_count}</div>
                         </div>
-                        <span>Tensp</span>
-                      </div>
-                      <div className='text-orange'>$469</div>
-                    </div>
-                  </li>
+                      </li>
+                    ))
+                  ) : (
+                    <h1>khong co san pham</h1>
+                  )}
                 </ul>
                 <div className='my-3'>
                   <div className='pb-5 flex justify-between items-center px-3 '>
