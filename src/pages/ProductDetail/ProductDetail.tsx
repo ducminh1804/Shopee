@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { getQueryParam } from '../../hooks/getQueryParams'
+import { useQueryParams } from '../../hooks/useQueryParams'
 import { getProductById } from '../../api/product.api'
 import classNames from 'classnames'
 import Starts from '../../components/Starts'
 import { discount, formatNumber, getIdFromNameId } from '../../utils/utils'
 import { useEffect, useMemo, useState } from 'react'
 import { Product } from '../../types/product.type'
+import QuantityController from '../../components/QuantityController'
 
 export default function ProductDetail() {
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const [activeImg, setActiveImg] = useState('')
+  const [quantity, setQuantity] = useState(1)
   const productQuery = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProductById(id as string)
@@ -36,6 +38,9 @@ export default function ProductDetail() {
     setActiveImg(currentImages[0])
   }, [product])
 
+  const handleQuantity = (quantity: number) => {
+    setQuantity(quantity)
+  }
   return (
     <div className='py-6 px-6'>
       <div className='py-4'>
@@ -127,7 +132,14 @@ export default function ProductDetail() {
                     {discount(Number(product?.price), Number(product?.price_before_discount))}%
                   </div>
                 </div>
-                <div>soluong</div>
+                <div>
+                  <QuantityController
+                    cur_val={quantity}
+                    max={100}
+                    onIncrease={handleQuantity}
+                    onDecrease={handleQuantity}
+                  />
+                </div>
                 <div className='action'>
                   <button className='text-xs text-orange border-1 p-3 rounded bg-gray-400'>Thêm Vào Giỏ Hàng</button>
                   <button className='my-2 mx-2 text-xs text-white border-1 p-3 rounded bg-orange'>Mua Ngay</button>

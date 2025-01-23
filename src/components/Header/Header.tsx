@@ -1,14 +1,29 @@
 import { useDispatch, useSelector } from 'react-redux'
 import Floating from '../Floating'
 import { RootState } from '../../store'
-import { Link, useNavigate } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { ApiLogOut } from '../../api/auth.api'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
 import { isLogOut } from '../../pages/authentication.slice'
+import { useQueryConfig } from '../../hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import { omit } from 'lodash'
 
+type FormValues = {
+  productName: string
+}
 export default function Header() {
+  const { register, handleSubmit, watch } = useForm<FormValues>({
+    defaultValues: {
+      productName: ''
+    }
+  })
+  const checkSearchForm = () => {
+    const name = watch('productName')
+    return name.trim() === '' || name.length == 0
+  }
   const isLogin = useSelector((state: RootState) => state.authReducer.isAuth)
   const userProfile = useSelector((state: RootState) => state.authReducer.profile)
   const navigate = useNavigate()
@@ -25,7 +40,26 @@ export default function Header() {
   const handleClick = () => {
     logOutMutation.mutate()
   }
+  const queryConfig = useQueryConfig()
+  console.log('queryConfig', queryConfig)
 
+  console.log(queryConfig)
+  const onSubmit = (data: FormValues) => {
+    console.log(data)
+    const config = queryConfig
+    navigate({
+      pathname: '/',
+      search: createSearchParams(
+        omit(
+          {
+            ...config,
+            name: data.productName
+          },
+          ['order']
+        ) as any
+      ).toString()
+    })
+  }
   return (
     <header className='w-full'>
       <div className='mt-0 pr-6 bg-[linear-gradient(-180deg,#f53d2d,#f63)]'>
@@ -116,12 +150,20 @@ export default function Header() {
             </svg>
           </div>
           <div className='col-span-9 flex items-center justify-center'>
-            <form className='w-full rounded flex justify-between px-1 py-1 bg-white'>
+            <form onSubmit={handleSubmit(onSubmit)} className='w-full rounded flex justify-between px-1 py-1 bg-white'>
               <div className='w-full pr-5'>
-                <input className='border-0 focus:outline-none ml-4  h-full w-full' type='text' placeholder='Shoppe' />
+                <input
+                  {...register('productName')}
+                  placeholder='Shoppe'
+                  className='border-0 focus:outline-none ml-4  h-full w-full'
+                  type='text'
+                />
               </div>
 
-              <button className='bg-orange text-white py-2 px-4  rounded transform transition-transform duration-200 hover:scale-105'>
+              <button
+                disabled={checkSearchForm()}
+                className='bg-orange text-white py-2 px-4  rounded transform transition-transform duration-200 hover:scale-105'
+              >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'

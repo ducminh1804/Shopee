@@ -1,33 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import AsideFitler from './components/AsideFilter/AsideFitler'
+import AsideFitler from './components/AsideFilter/AsideFilter'
 import Product from './components/Product'
 import SortProductList from './components/SortProductList'
 import { getProducts } from '../../api/product.api'
-import { getQueryParam } from '../../hooks/getQueryParams'
+import { useQueryParams } from '../../hooks/useQueryParams'
 import Pagination from '../../components/Pagination'
 import { productParam } from '../../types/productQueryParam.type'
 import { AxiosRequestConfig } from 'axios'
 import { isUndefined, omitBy } from 'lodash'
 import Skeleton from '../../components/Skeleton'
 import { getCategories } from '../../api/categories'
+import { useQueryConfig } from '../../hooks/useQueryConfig'
 
 export default function ProductList() {
-  const params: productParam = getQueryParam()
-  const queryConfig: productParam = omitBy(
-    {
-      category: params.category,
-      exclude: params.exclude,
-      limit: params.limit,
-      name: params.name,
-      order: params.order,
-      price_max: params.price_max,
-      price_min: params.price_min,
-      rating_filter: params.rating_filter,
-      sort_by: params.sort_by,
-      page: params.page || 1
-    },
-    isUndefined
-  )
+  const queryConfig = useQueryConfig()
   const getProductsQuery = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => getProducts(queryConfig as AxiosRequestConfig<productParam>)
