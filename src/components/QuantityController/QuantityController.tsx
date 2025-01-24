@@ -28,7 +28,6 @@ export default function QuantityController({ onIncrease, onDecrease, cur_val, ma
         `}
       </style>
       <div className='flex items-center my-1 border-1'>
-        <span className='pr-2'>Số lượng</span>
         <button onClick={decrease} disabled={cur_val === 0} className='border bg-white px-2'>
           -
         </button>

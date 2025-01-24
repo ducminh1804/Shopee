@@ -8,6 +8,7 @@ import MainLayout from './layouts/MainLayout'
 import { useSelector } from 'react-redux'
 import { RootState } from './store'
 import ProductDetail from './pages/ProductDetail'
+import Cart from './pages/Cart'
 
 export default function useRouteElement() {
   const isLogin = useSelector<RootState>((state) => state.authReducer.isAuth)
@@ -53,6 +54,20 @@ export default function useRouteElement() {
             <RegisterLayout>
               <Register />
             </RegisterLayout>
+          )
+        }
+      ]
+    },
+    {
+      path: '',
+      element: <ProtectedIsNotLogin />,
+      children: [
+        {
+          path: '/cart',
+          element: (
+            <MainLayout>
+              <Cart />
+            </MainLayout>
           )
         }
       ]
