@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQueryParams } from '../../hooks/useQueryParams'
 import { getProductById } from '../../api/product.api'
@@ -13,11 +13,11 @@ import { Purchases } from '../../types/purchase.type'
 import { SuccessReponse } from '../../types/utils.type'
 import { AxiosResponse } from 'axios'
 import { toast } from 'react-toastify'
-import { queryClient } from '../../main'
 import { purchaseStatus } from '../../constants/purchases'
 
 export default function ProductDetail() {
   const { nameId } = useParams()
+  const queryClient = useQueryClient()
   const id = getIdFromNameId(nameId as string)
   const [activeImg, setActiveImg] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -73,7 +73,7 @@ export default function ProductDetail() {
         await queryClient.fetchQuery({
           queryKey: ['product', { status: purchaseStatus.inCart }]
         })
-        navigate(`/cart`, { state: { productId: product._id} })
+        navigate(`/cart`, { state: { productId: product._id } })
       }
     })
   }

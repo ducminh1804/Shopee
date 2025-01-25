@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Floating from '../Floating'
 import { RootState } from '../../store'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ApiLogOut } from '../../api/auth.api'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
@@ -12,12 +12,12 @@ import { useForm } from 'react-hook-form'
 import { omit } from 'lodash'
 import { purchaseStatus } from '../../constants/purchases'
 import purchaseApi from '../../api/purchase.api'
-import { queryClient } from '../../main'
 
 type FormValues = {
   productName: string
 }
 export default function Header() {
+  const queryClient = useQueryClient()
   const { register, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       productName: ''

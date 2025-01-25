@@ -9,6 +9,10 @@ import { useSelector } from 'react-redux'
 import { RootState } from './store'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
+import UserLayout from './layouts/UserLayout'
+import Profile from './pages/User/Profile'
+import Password from './pages/User/Password'
+import Purchase from './pages/User/Purchase'
 
 export default function useRouteElement() {
   const isLogin = useSelector<RootState>((state) => state.authReducer.isAuth)
@@ -67,6 +71,30 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Cart />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/account/profile',
+          element: (
+            <MainLayout>
+              <UserLayout children={<Profile />} />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/account/change-password',
+          element: (
+            <MainLayout>
+              <UserLayout children={<Password />} />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/account/my-purchase',
+          element: (
+            <MainLayout>
+              <UserLayout children={<Purchase />} />
             </MainLayout>
           )
         }

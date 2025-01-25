@@ -3,13 +3,8 @@ import QuantityController from '../../components/QuantityController'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { purchaseStatus } from '../../constants/purchases'
 import purchaseApi from '../../api/purchase.api'
-import { Product } from '../../types/product.type'
-import { queryClient } from '../../main'
-import { get, set } from 'lodash'
-import { clearScreenDown } from 'readline'
 import { toast } from 'react-toastify'
 import { useLocation } from 'react-router-dom'
-import { CLIENT_RENEG_WINDOW } from 'tls'
 
 export default function Cart() {
   const [total, setTotal] = useState<number>(0)
@@ -87,15 +82,14 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    const productIdBuyNow = location.state.productId
+    const productIdBuyNow = location.state?.productId || ''
     const initCheckBox = all_purchases.reduce((acc, cur) => {
-      if(cur.product._id === productIdBuyNow) {
+      if (productIdBuyNow && cur.product._id === productIdBuyNow) {
         return { ...acc, [cur._id]: true }
       }
       return { ...acc, [cur._id]: false }
     }, {})
     setCheckBox(initCheckBox)
-
   }, [all_purchases])
 
   useEffect(() => {
@@ -112,7 +106,6 @@ export default function Cart() {
     })
     setTotal(newTotal)
     setSelectQuantity(newQuantity)
-
   }, [checkBox, quantity]) // Theo dõi cả checkBox, quantity và all_purchases
 
   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {

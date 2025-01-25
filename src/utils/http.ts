@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AuthResponse } from "../types/auth.type";
 import { clearLS, useSetDataToLS } from "./auth";
+import { clear } from "console";
 
 export const http = axios.create({
   baseURL: "https://api-ecom.duthanhduoc.com/",
@@ -36,6 +37,11 @@ http.interceptors.response.use(
     return response;
   },
   function (error) {
+    if (error.response?.status === 401) {
+      clearLS()
+      window.location.href = '/login'
+    }
     return Promise.reject(error)
   }
 )
+// https://codestus.com/posts/axios-interceptors-tai-sao-chung-ta-can-no
