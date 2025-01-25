@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQueryParams } from '../../hooks/useQueryParams'
 import { getProductById } from '../../api/product.api'
 import classNames from 'classnames'
@@ -21,6 +21,7 @@ export default function ProductDetail() {
   const id = getIdFromNameId(nameId as string)
   const [activeImg, setActiveImg] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const navigate = useNavigate()
   const productQuery = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProductById(id as string)
@@ -64,6 +65,19 @@ export default function ProductDetail() {
       }
     })
   }
+
+  const handleBuyNow = () => {
+    addToCartMutations.mutate(product, {
+      onSuccess: async () => {
+        toast.success('Thêm vào giỏ hàng thành công')
+        await queryClient.fetchQuery({
+          queryKey: ['product', { status: purchaseStatus.inCart }]
+        })
+        navigate(`/cart`, { state: { productId: product._id} })
+      }
+    })
+  }
+
   return (
     <div className='py-6 px-6'>
       <div className='py-4'>
@@ -167,7 +181,12 @@ export default function ProductDetail() {
                   <button onClick={addToCart} className='text-xs text-orange border-1 p-3 rounded bg-gray-400'>
                     Thêm Vào Giỏ Hàng
                   </button>
-                  <button className='my-2 mx-2 text-xs text-white border-1 p-3 rounded bg-orange'>Mua Ngay</button>
+                  <button
+                    onClick={handleBuyNow}
+                    className='my-2 mx-2 text-xs text-white border-1 p-3 rounded bg-orange'
+                  >
+                    Mua Ngay
+                  </button>
                 </div>
               </div>
             </div>
