@@ -12,4 +12,4 @@ export interface Purchases {
   product: Product,
   createdAt: string,
   updatedAt: string,
-}
+} 
