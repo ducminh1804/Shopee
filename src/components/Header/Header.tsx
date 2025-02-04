@@ -123,7 +123,12 @@ export default function Header() {
               Children={
                 <>
                   <ul className='mt-1 px-3 pt-1'>
-                    <li className='pb-2 m-0 hover:text-orange cursor-pointer'>Tài Khoản Của Tôi</li>
+                    <li
+                      onClick={() => navigate('/account/profile')}
+                      className='pb-2 m-0 hover:text-orange cursor-pointer'
+                    >
+                      Tài Khoản Của Tôi
+                    </li>
                     <li className='pb-2 hover:text-orange cursor-pointer'>Đơn Mua</li>
                     <button onClick={handleClick} className='pb-2 hover:text-orange cursor-pointer'>
                       Đăng Xuất
